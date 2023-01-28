@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <iomanip>
 #include "node.h"
 
 using namespace std;
@@ -7,6 +8,7 @@ using namespace std;
 void add(Node* input, char firstName[20], char lastName[20], float gpa, int id);
 void print(Node* next);
 void deleteStu(Node* &head, Node* current, Node* prev, int input);;
+void avgGPA(Node* current, float avg, int num);
 
 Node* head = NULL;
 int main(){
@@ -37,6 +39,10 @@ int main(){
       cout << "What is the student's ID?" << endl;
       cin >> input;
       deleteStu(head, head, head, input);
+    } else if (strcmp(input, "AVERAGE") == 0){
+      float total;
+      float count = 0;
+      avgGPA(head, total, count);
     }
   }
   return 0;
@@ -66,6 +72,10 @@ void print(Node* next){
 }
 
 void deleteStu(Node* &head, Node* current, Node* prev, int input){
+  if (head == NULL){
+    cout << "List is empty" << endl;
+    return;
+  }
   if (current->getStudent()->getID() == input){
     if (prev == NULL){
       prev->setNext(current->getNext());
@@ -80,4 +90,14 @@ void deleteStu(Node* &head, Node* current, Node* prev, int input){
       cout << "Sorry, no ID matches" << endl;
     }
   }
+}
+
+void avgGPA(Node* current, float avg, int num){
+  if (current == NULL){
+    cout << "Average GPA: " << fixed << setprecision(2) << avg/num << endl;
+    return;
+  }
+  avg += current->getStudent()->getGPA();
+  num++;
+  avgGPA(current->getNext(), avg, num);
 }

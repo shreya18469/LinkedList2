@@ -14,5 +14,6 @@ class Student{
   void setStudent(char firstName[20], char lastName[20], float gpa, int id);
   void print();
   int getID();
+  float getGPA();
 };
 #endif

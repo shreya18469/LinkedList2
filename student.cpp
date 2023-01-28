@@ -17,3 +17,6 @@ void Student::print(){
 int Student::getID(){
   return id;
 }
+float Student::getGPA(){
+  return gpa;
+}
