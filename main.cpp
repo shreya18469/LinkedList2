@@ -4,8 +4,8 @@
 #include "node.h"
 
 using namespace std;
-
-void add(Node* input, char firstName[20], char lastName[20], float gpa, int id);
+//function prototypes
+void add(Node* &input, char firstName[20], char lastName[20], float gpa, int id);
 void print(Node* next);
 void deleteStu(Node* &head, Node* current, Node* prev, int input);;
 void avgGPA(Node* current, float avg, int num);
@@ -15,9 +15,12 @@ int main(){
   char input[10];
   bool stillPlaying = true;
   while(stillPlaying == true){
-    cout << "Enter a command." << endl;
+    cout << "Enter a command(ADD, PRINT, DELETE, AVERAGE, or QUIT)" << endl;
     cin >> input;
-    if (strcmp(input, "ADD") == 0){
+    for (int i = 0; i < 10; i++){ // convert input to uppercase
+    input[i] =  toupper(input[i]);
+  }
+    if (strcmp(input, "ADD") == 0){ //if user wants to add
        int id;
       float gpa;
       char firstName[20];
@@ -31,45 +34,64 @@ int main(){
       cout << "What is their GPA?" << endl;
       cin >> gpa;
       add(head, firstName, lastName, gpa, id);
-    }else if (strcmp(input, "PRINT") == 0){
+    }else if (strcmp(input, "PRINT") == 0){ //if user wants to print
       print(head);
       cout << endl;
-    } else if (strcmp(input, "DELETE") == 0) {
+    } else if (strcmp(input, "DELETE") == 0) { //if user wants to delete
       int input;
       cout << "What is the student's ID?" << endl;
       cin >> input;
       deleteStu(head, head, head, input);
-    } else if (strcmp(input, "AVERAGE") == 0){
+    } else if (strcmp(input, "AVERAGE") == 0){ //if user wants to average
       float total;
       float count = 0;
       avgGPA(head, total, count);
+    } else if (strcmp(input, "QUIT") == 0){ //if user wants to quit
+      stillPlaying = false;
     }
   }
   return 0;
 }
 
-void add(Node* input, char firstName[20], char lastName[20], float gpa, int id){
-  if (head == NULL){
-    head = new Node(new Student());
-    head->getStudent()->setStudent(firstName, lastName, gpa, id);
+void add(Node* &current, char firstName[20], char lastName[20], float gpa, int id){
+  if(current == NULL){//if we are adding the first student
+    current = new Node(new Student());
+    current->getStudent()->setStudent(firstName, lastName, gpa, id);//set the students properties
     return;
-  } else if(input->getNext() != NULL) {
-    add(input->getNext(), firstName, lastName, gpa, id);
+  } else if(current->getNext() == NULL){
+    Student* s = new Student; 
+    Node* n = new Node(s); //create a new node to add
+    s->setStudent(firstName, lastName, gpa, id);
+    if(current->getStudent()->getID() > s->getID()){ //if new student has lower ID than existing students
+      n->setNext(current);
+      current = n;
+    }
+    else{
+      current->setNext(n);
+    }
+    return;
   }
-  input->setNext(new Node(new Student));
-input->getNext()->getStudent()->setStudent(firstName, lastName, gpa, id);
-  return;
+  if(current->getNext()->getStudent()->getID() > id){//If next ID is greater than new students
+    Student* s = new Student;
+    Node* n = new Node(s); //create new node
+    s->setStudent(firstName, lastName, gpa, id);
+    n->setNext(current->getNext());
+    current->setNext(n);
+    return;
+  }
+  Node* next = current->getNext();
+  add(next, firstName, lastName, gpa, id); //using recursion
+}
+void print(Node* next){//Print all students
+  if(next == head){
+    cout << "List";
+  }
+  if(next != NULL){
+    next->getStudent()->print();
+    print(next->getNext()); //using recursion
+  }
 }
 
-void print(Node* next){
-  if (next == head){
-    cout << "List:";
-  }
-  if (next != NULL){
-    next->getStudent()->print();
-    print(next->getNext());
-  }
-}
 
 void deleteStu(Node* &head, Node* current, Node* prev, int input){
   if (head == NULL){
