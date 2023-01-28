@@ -12,7 +12,7 @@ void Student::setStudent(char firstName2[20], char lastName2[20], float gpa2, in
   id = id2;
 }
 void Student::print(){
-  cout << "Name: " << Fname << " " << Lname << " " << "ID: " << id << " " << "GPA: " << setprecision(2) << fixed <<  gpa;
+  cout << " Name: " << Fname << " " << Lname << " " << "ID: " << id << " " << "GPA: " << setprecision(2) << fixed <<  gpa;
 }
 int Student::getID(){
   return id;

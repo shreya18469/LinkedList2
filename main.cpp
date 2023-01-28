@@ -6,7 +6,7 @@ using namespace std;
 
 void add(Node* input, char firstName[20], char lastName[20], float gpa, int id);
 void print(Node* next);
-void deleteStu(Node* &head);
+void deleteStu(Node* &head, Node* current, Node* prev, int input);;
 
 Node* head = NULL;
 int main(){
@@ -16,7 +16,7 @@ int main(){
     cout << "Enter a command." << endl;
     cin >> input;
     if (strcmp(input, "ADD") == 0){
-      int id;
+       int id;
       float gpa;
       char firstName[20];
       char lastName[20];
@@ -29,12 +29,14 @@ int main(){
       cout << "What is their GPA?" << endl;
       cin >> gpa;
       add(head, firstName, lastName, gpa, id);
-    }
-else if (strcmp(input, "PRINT") == 0){
+    }else if (strcmp(input, "PRINT") == 0){
       print(head);
       cout << endl;
     } else if (strcmp(input, "DELETE") == 0) {
-
+      int input;
+      cout << "What is the student's ID?" << endl;
+      cin >> input;
+      deleteStu(head, head, head, input);
     }
   }
   return 0;
@@ -55,7 +57,7 @@ input->getNext()->getStudent()->setStudent(firstName, lastName, gpa, id);
 
 void print(Node* next){
   if (next == head){
-    cout << "List: ";
+    cout << "List:";
   }
   if (next != NULL){
     next->getStudent()->print();
@@ -63,6 +65,19 @@ void print(Node* next){
   }
 }
 
-void deleteStu(Node* &head){
-
+void deleteStu(Node* &head, Node* current, Node* prev, int input){
+  if (current->getStudent()->getID() == input){
+    if (prev == NULL){
+      prev->setNext(current->getNext());
+    } else {
+      head = current->getNext();
+    }
+    delete current;
+  } else {
+    if(current->getNext() != NULL){
+      deleteStu(head, current->getNext(), current, input);
+    } else {
+      cout << "Sorry, no ID matches" << endl;
+    }
+  }
 }
