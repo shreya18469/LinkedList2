@@ -48,12 +48,14 @@ int main(){
       avgGPA(head, total, count);
     } else if (strcmp(input, "QUIT") == 0){ //if user wants to quit
       stillPlaying = false;
+    } else {
+      cout << "Sorry, invalid command." << endl;
     }
   }
   return 0;
 }
 
-void add(Node* &current, char firstName[20], char lastName[20], float gpa, int id){
+void add(Node* &current, char firstName[20], char lastName[20], float gpa, int id){ //add a new student to the list 
   if(current == NULL){//if we are adding the first student
     current = new Node(new Student());
     current->getStudent()->setStudent(firstName, lastName, gpa, id);//set the students properties
@@ -84,7 +86,10 @@ void add(Node* &current, char firstName[20], char lastName[20], float gpa, int i
 }
 void print(Node* next){//Print all students
   if(next == head){
-    cout << "List";
+    cout << "List:";
+  }
+  if (head == NULL){
+    return;
   }
   if(next != NULL){
     next->getStudent()->print();
@@ -93,33 +98,34 @@ void print(Node* next){//Print all students
 }
 
 
-void deleteStu(Node* &head, Node* current, Node* prev, int input){
+void deleteStu(Node* &head, Node* current, Node* prev, int input){ //delete a student by ID
   if (head == NULL){
     cout << "List is empty" << endl;
     return;
   }
-  if (current->getStudent()->getID() == input){
-    if (prev == NULL){
-      prev->setNext(current->getNext());
+  if (current->getStudent()->getID() == input){ //if current student matches ID input
+    if (current == head){
+      head = current->getNext(); 
     } else {
-      head = current->getNext();
+      //head = current->getNext();
+      prev->setNext(current->getNext()); 
     }
-    delete current;
+    delete current; //delete current node
   } else {
     if(current->getNext() != NULL){
-      deleteStu(head, current->getNext(), current, input);
+      deleteStu(head, current->getNext(), current, input); //using recursion
     } else {
       cout << "Sorry, no ID matches" << endl;
     }
   }
 }
 
-void avgGPA(Node* current, float avg, int num){
-  if (current == NULL){
-    cout << "Average GPA: " << fixed << setprecision(2) << avg/num << endl;
+void avgGPA(Node* current, float avg, int num){ //take the average of the GPAs 
+  if (current == NULL){ //check if reached end of list
+    cout << "Average GPA: " << fixed << setprecision(2) << avg/num << endl; //calculate the average 
     return;
   }
-  avg += current->getStudent()->getGPA();
-  num++;
-  avgGPA(current->getNext(), avg, num);
+  avg += current->getStudent()->getGPA(); //add current GPA to running total 
+  num++; //increment number of students count
+  avgGPA(current->getNext(), avg, num); //using recursion to continue the processs until all students are processed
 }
