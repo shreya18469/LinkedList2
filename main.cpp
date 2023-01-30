@@ -1,3 +1,8 @@
+/*
+Shreya Suresh
+1/29/23
+LinkedList2- Create a singly linked list of students. User can add, print, delete, average, or quit.
+ */
 #include <iostream>
 #include <cstring>
 #include <iomanip>
